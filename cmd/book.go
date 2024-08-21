@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 
@@ -19,6 +20,7 @@ func checkMiddleware(c *fiber.Ctx) error {
 		return fiber.ErrUnauthorized
 	}
 	// name := claims["name"].(string)
+	fmt.Print(claims["role"])
 	return c.Next()
 }
 
