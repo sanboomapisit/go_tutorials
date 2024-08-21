@@ -1,4 +1,4 @@
-package main
+package tutorial
 
 import (
 	"fmt"
@@ -136,4 +136,99 @@ func main() {
 	fmt.Println("หลังลบ map :", m, "lenght = ", len(m))
 
 	fmt.Println("ใช้เวลา :", time.Since(start), ": วินาที")
+}
+
+func pointerTest() {
+	data := 10
+	a := new(int) //same var b *int
+	var b *int
+	a = &data // เก็บ address ของ data ไว้ใน value ของ a
+	// & ใส่ด้านหน้าเพื่อ get ค่า address ของตัวแปลนั้นๆออกมา
+	fmt.Print(data, a)
+	fmt.Print(*a) //เรียกดูค่าของตัวแปล address ที่มัน point ไป
+	fmt.Print(b)
+}
+
+func doublePointerTest() {
+	data := 10
+	a := new(int)  //same var b *int
+	a = &data      // เก็บ address ของ data ไว้ใน value ของ a
+	b := new(*int) //double pointer same ,var c **int
+	var c **int    //double pointer เก็บค่า address ของ pointer อีกที
+	b = &a
+	// & ใส่ด้านหน้าเพื่อ get ค่า address ของตัวแปลนั้นๆออกมา
+	fmt.Print(data, a, b, c)
+	fmt.Print(*a) //เรียกดูค่าของตัวแปล address ที่มัน point ไป
+}
+func double(n []int) []int {
+	// ด้วย slice เป็น การ copy ค่าเป็น pass by referance ทำให้ ค่า n ที่รับมาที่ parameter เป็นค่าเดี๋ยวกับที่ส่งเข้ามา ถ้าแก้ไขค่า n
+	//ภายใน func นี้ต่อให้ไม่ return s1 จากภายนอกที่ส่งเข้ามาค่าจะเปลี่ยนไปด้วย
+	temp := make([]int, len(n))
+	for i, v := range n {
+		temp[i] = v * 2
+	}
+	return temp
+}
+
+func test() {
+	s1 := []int{1, 2, 3}
+	s2 := double(s1)
+
+	fmt.Print(s1)
+	fmt.Print(s2)
+}
+
+type Player struct {
+	//ใน struct แต่ละ filed มี address เป็นของตัวเอง
+	Username string
+	Level    int
+}
+
+func (p Player) upLevel() {
+	p.Level += 1
+}
+
+func (p *Player) upLevelPointer() {
+	p.Level += 1
+}
+
+func usePointerInStruct() {
+	//ใน struct แต่ละ filed มี address เป็นของตัวเอง
+	// p1 address 101
+	p1 := Player{
+		// Username address 1001
+		Username: "player1",
+		// Level address 1002
+		Level: 1,
+	}
+	// p1 address 102
+	p2 := Player{
+		// Username address 2001
+		Username: "player1",
+		// Level address 2002
+		Level: 10,
+	}
+	p1.upLevel()
+
+	p2.upLevel()
+	// เมื่อใช้ค่า p1 p2 เลยไม่เปลี่ยน ✗
+
+	// ถ้าอยากให้ค่าเปลี่ยนด้วยให้ประกาศ struct ตอนสร้างเป็น point ดังนี้
+	p3 := &Player{
+		// Username address 1001
+		Username: "player1",
+		// Level address 1002
+		Level: 1,
+	}
+	// p1 address 102
+	p4 := &Player{
+		// Username address 2001
+		Username: "player1",
+		// Level address 2002
+		Level: 10,
+	}
+	p3.upLevelPointer()
+	p4.upLevelPointer()
+
+	// เมื่อใช้ค่า p3 p4 เลยเปลี่ยน ✓
 }

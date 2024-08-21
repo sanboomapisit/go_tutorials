@@ -1,5 +1,5 @@
 // [มีการใช้งาน Defer]
-package main
+package defertest
 
 import (
 	"fmt"
